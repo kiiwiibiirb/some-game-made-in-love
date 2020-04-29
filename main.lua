@@ -72,10 +72,6 @@ function love.draw()
 
 	-- This draws Slink.
 	love.graphics.draw(slink, player.x, player.y, 0, 1, 1, 0, 0)
-
-	-- This is some FPS counter just to see how high it gets
-	love.graphics,setColor(0, 255, 0) -- Colour is green because again, fuck you.
-	love.graphics.print('FPS: ' ..tostring( love.timer.getFPS()), 10, 10)
 end
 
 function love.gamepadpressed(joystick, button)
