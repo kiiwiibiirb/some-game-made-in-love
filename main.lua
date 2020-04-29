@@ -15,20 +15,20 @@ function love.load()
 	platform.y = platform.height / 2
 
 	-- Position of Slink
-	slink.x = love.graphics.getWidth() / 2
-	slink.y = love.graphics.getHeight() / 2
+	player.x = love.graphics.getWidth() / 2
+	player.y = love.graphics.getHeight() / 2
 
 	-- Slink's sprite
 	slink = love.graphics.newImage('slink.png')
 
 	-- Slink's speed
-	slink.speed = 200
+	player.speed = 200
 
 	-- Gravity and jumping.
-	slink.ground = slink.y
-	slink.y_velocity = 0
-	slink.jump_height = -300
-	slink.gravity = -500
+	player.ground = player.y
+	player.y_velocity = 0
+	player.jump_height = -300
+	player.gravity = -500
 end
 
 function love.update(dt)
@@ -36,32 +36,32 @@ function love.update(dt)
 
 	-- Left and right on dpad = that direction of movement.
 	if joystick:isGamepadDown('dpleft') then
-		if slink.x > 0 then
-			slink.x = slink.x - (slink.speed * dt)
+		if player.x > 0 then
+			player.x = player.x - (player.speed * dt)
 		end
 	elseif joystick:isGamepadDown('dpright') then
-		if slink.x < (love.graphics.getWidth() - slink:getWidth()) then
-			slink.x = slink.x + (slink.speed * dt)
+		if player.x < (love.graphics.getWidth() - slink:getWidth()) then
+			player.x = player.x + (player.speed * dt)
 		end
 	end
 
 	-- Pressing "A" will make Slink jump.
 	if joystick:isGamepadDown('a') then
-		if slink.y_velocity == 0 then
-			slink.y_velocity = slink.jump_height
+		if player.y_velocity == 0 then
+			player.y_velocity = player.jump_height
 		end
 	end
 
 	-- Jump physics.
-	if slink.y_velocity ~= 0 then
-		slink.y = slink.y + slink.y_velocity * dt
-		slink.y_velocity = slink.y_velocity - slink.gravity * dt
+	if player.y_velocity ~= 0 then
+		player.y = player.y + player.y_velocity * dt
+		player.y_velocity = player.y_velocity - player.gravity * dt
 	end
 
 	-- Making sure you don't fall through the floor, dunce.
-	if slink.y > slink.ground then
-		slink.y_velocity = 0
-		slink.y = slink.ground
+	if player.y > player.ground then
+		player.y_velocity = 0
+		player.y = player.ground
 	end
 end
 
@@ -71,12 +71,12 @@ function love.draw()
 	love.graphics.rectangle('fill', platform.x, platform.y, platform.width, platform.height)
 
 	-- This draws Slink.
-	love.graphics.draw(slink, slink.x, slink.y, 0, 1, 1, 0, 32)
+	love.graphics.draw(slink, player.x, player.y, 0, 1, 1, 0, 0)
 end
 
 function love.gamepadpressed(joystick, button)
 	-- Pressing the minus button will quit the game, sucks if you don't have that button lol
-	if button == 'select' then
+	if button == 'start' then
 		love.event.quit()
 	end
 end
