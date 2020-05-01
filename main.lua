@@ -18,8 +18,11 @@ function love.load()
 	player.x = love.graphics.getWidth() / 2
 	player.y = love.graphics.getHeight() / 2
 
-	-- Slink's sprite
-	slink = love.graphics.newImage('slink.png')
+	-- Slink's sprite [STILL IMAGE]
+	--slink = love.graphics.newImage('slink.png')
+
+	-- Slink's Sprite [ANIMATED]
+	animation = newAnimation(love.graphics.newImage("slink.png"), 88, 104, 1)
 
 	-- Slink's speed
 	player.speed = 200
@@ -40,7 +43,7 @@ function love.update(dt)
 			player.x = player.x - (player.speed * dt)
 		end
 	elseif joystick:isGamepadDown('dpright') then
-		if player.x < (love.graphics.getWidth() - slink:getWidth()) then
+		if player.x < (love.graphics.getWidth() - animation:getWidth()) then
 			player.x = player.x + (player.speed * dt)
 		end
 	end
@@ -63,6 +66,12 @@ function love.update(dt)
 		player.y_velocity = 0
 		player.y = player.ground
 	end
+
+	-- Updates Slink's Sprite
+	animation.currentTime = animation.currentTime + dt
+	if animation.currentTime >= animation.duration then
+		animation.currentTime = animation.currentTime - animation.duration
+	end
 end
 
 function love.draw()
@@ -70,8 +79,30 @@ function love.draw()
 	love.graphics.setColor(128, 0, 128)
 	love.graphics.rectangle('fill', platform.x, platform.y, platform.width, platform.height)
 
-	-- This draws Slink.
-	love.graphics.draw(slink, player.x, player.y, 0, 1, 1, 0, 0)
+	-- This draws Slink. [STATIC SPRITE]
+	-- love.graphics.draw(slink, player.x, player.y, 0, 1, 1, 0, 0)
+
+	-- This draws Slink. [ANIMATED SPRITE]
+	local spriteNum = math.floor(animation.currentTime / animation.duration * #animation.quads) + 1
+	love.graphics.draw(animation.spriteSheet, animation.quads[spriteNum], 0, 0, 0, 4)
+end
+
+-- Animation function for Slink's animated sprite [NOT NEEDED FOR STATIC SPRITE](obviously)
+function newAnimation(image, width, height, duration)
+	local animation = {}
+	animation.spriteSheet = image;
+	animation.quads = {};
+
+	for y = 0, image:getHeight() - height, height do
+		for x = 0, image:getWidth() - width, width do
+			table.insert(animation.quads, love.graphics.newQuad(x, y, width, height, image:getDimensions()))
+		end
+	end
+
+	animation.duration = duration or 1
+	animation.currentTime = 0
+
+	return animation
 end
 
 function love.gamepadpressed(joystick, button)
