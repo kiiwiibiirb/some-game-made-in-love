@@ -19,31 +19,49 @@ function love.load()
 	player.y = love.graphics.getHeight() / 2
 
 	-- Slink's sprite [STILL IMAGE]
-	--slink = love.graphics.newImage('slink.png')
+	slink = love.graphics.newImage('sprites/slink/slink.png')
 
 	-- Slink's Sprite [ANIMATED]
-	animation = newAnimation(love.graphics.newImage("slink.png"), 88, 104, 1)
+	-- This will be added in at a later date. I have no clue how to get this working lmao
+	--animation = newAnimation(love.graphics.newImage("sprites/slink/slink.png"), 88, 104, 1)
 
 	-- Slink's speed
-	player.speed = 200
+	-- 200 is waaaaaay too slow, 500 is speedy as fuck and I like it that way.
+	-- May actually turn it up to 750!
+	player.speed = 500
 
 	-- Gravity and jumping.
 	player.ground = player.y
 	player.y_velocity = 0
-	player.jump_height = -300
-	player.gravity = -500
+	-- Lower number = higher you jump
+	player.jump_height = -500
+	-- Gravity at -500 is like a feather falling.
+	-- Lower number = faster fall rate
+	player.gravity = -750
 end
 
 function love.update(dt)
 	if not joystick then return end
 
 	-- Left and right on dpad = that direction of movement.
+
+	-- NOTE: Slink can go off screen. This needs to be fixed! (Also, this is the movement for the animated sprite)
+	-- This will be added in at a later date. I have no clue how to get this working lmao
+	--[[
+	if joystick:isGamepadDown('dpleft') then
+		player.x = player.x - (player.speed * dt)
+	elseif joystick:isGamepadDown('dpright') then
+		player.x = player.x + (player.speed * dt)
+	end
+	--]]
+
+	-- This is left and right movement but it only works with the static sprite... (Don't ask me how I have no clue why.)
 	if joystick:isGamepadDown('dpleft') then
 		if player.x > 0 then
 			player.x = player.x - (player.speed * dt)
 		end
 	elseif joystick:isGamepadDown('dpright') then
-		if player.x < (love.graphics.getWidth() - animation:getWidth()) then
+		if player.x < (love.graphics.getWidth() - slink:getWidth()) then
 			player.x = player.x + (player.speed * dt)
 		end
 	end
@@ -68,10 +86,13 @@ function love.update(dt)
 	end
 
 	-- Updates Slink's Sprite
+	-- This will be added in at a later date. I have no clue how to get this working lmao
+	--[[
 	animation.currentTime = animation.currentTime + dt
 	if animation.currentTime >= animation.duration then
 		animation.currentTime = animation.currentTime - animation.duration
 	end
+	--]]
 end
 
 function love.draw()
@@ -80,14 +101,20 @@ function love.draw()
 	love.graphics.rectangle('fill', platform.x, platform.y, platform.width, platform.height)
 
 	-- This draws Slink. [STATIC SPRITE]
-	-- love.graphics.draw(slink, player.x, player.y, 0, 1, 1, 0, 0)
+	love.graphics.setColor(255, 255, 255)
+	love.graphics.draw(slink, player.x, player.y, 0, 1, 1, 0, 0)
 
 	-- This draws Slink. [ANIMATED SPRITE]
+	-- This will be added in at a later date. I have no clue how to get this working lmao
+	--[[
 	local spriteNum = math.floor(animation.currentTime / animation.duration * #animation.quads) + 1
-	love.graphics.draw(animation.spriteSheet, animation.quads[spriteNum], 0, 0, 0, 4)
+	love.graphics.draw(animation.spriteSheet, animation.quads[spriteNum], player.y, 0, 0, 4)
+	--]]
 end
 
 -- Animation function for Slink's animated sprite [NOT NEEDED FOR STATIC SPRITE](obviously)
+-- This will be added in at a later date. I have no clue how to get this working lmao
+--[[
 function newAnimation(image, width, height, duration)
 	local animation = {}
 	animation.spriteSheet = image;
@@ -104,6 +131,7 @@ function newAnimation(image, width, height, duration)
 
 	return animation
 end
+--]]
 
 function love.gamepadpressed(joystick, button)
 	-- Pressing the minus button will quit the game, sucks if you don't have that button lol
