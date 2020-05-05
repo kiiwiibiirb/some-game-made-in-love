@@ -120,7 +120,7 @@ function love.draw()
 	love.graphics.print('Press + to exit.', 0, 688)
 
 	-- This tells the version of what the game is at.
-	love.graphics.print('VERSION 0.0.1 ALPHA')
+	love.graphics.print('VERSION 0.0.1 ALPHA', 640, 0)
 end
 
 -- Animation function for Slink's animated sprite [NOT NEEDED FOR STATIC SPRITE](obviously)
