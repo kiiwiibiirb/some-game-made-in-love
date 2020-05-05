@@ -39,11 +39,6 @@ function love.load()
 	-- Lower number = faster fall rate
 	player.gravity = -750
 
-	-- Image of the "Press + to Leave"
-	plusleave = love.graphics.newImage('sprites/leave.png')
-
-	-- Song. Will be removed later due to copyright n' shit
-	cool = love.audio.newSource('audio/cool.mp3', 'stream')
 end
 
 function love.update(dt)
@@ -76,12 +71,6 @@ function love.update(dt)
 	if joystick:isGamepadDown('a') then
 		if player.y_velocity == 0 then
 			player.y_velocity = player.jump_height
-		end
-	end
-
-	if joystick:isGamepadDown('leftstick') then
-		if joystick:isGamepadDown('rightstick') then
-			love.audio.play(cool)
 		end
 	end
 
@@ -123,8 +112,15 @@ function love.draw()
 	love.graphics.draw(animation.spriteSheet, animation.quads[spriteNum], player.y, 0, 0, 4)
 	--]]
 
+
+	-- Setting the text colour to green.
+	love.graphics.setColor(0, 255, 0)
+
 	-- This is an indicator to tell you what to press to quit.
-	love.graphics.draw(plusleave, 0, 688)
+	love.graphics.print('Press + to exit.', 0, 688)
+
+	-- This tells the version of what the game is at.
+	love.graphics.print('VERSION 0.0.1 ALPHA')
 end
 
 -- Animation function for Slink's animated sprite [NOT NEEDED FOR STATIC SPRITE](obviously)
